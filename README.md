@@ -33,7 +33,7 @@ Built with Angular, Ionic, and Capacitor.
 
 <p align="center">
   <strong>📱 Install as PWA:</strong> open <a href="https://beaconchain.us">beaconchain.us</a> in Chrome/Safari → tap "Add to Home Screen".<br>
-  <strong>⬇️ Direct APK:</strong> <a href="https://beaconchain.us/download/app-release.apk">Download latest Android APK</a> (enable "unknown sources")
+  <strong>⬇️ Direct APK:</strong> <a href="https://beaconchain.us/download/app-release.apk">Download latest Android APK</a> (enable "Install from unknown sources")
 </p>
 
 ---
@@ -64,30 +64,8 @@ All data is served by the **Horizon API**, a fully independent backend built on 
 
 ---
 
-## 📱 Device Support
+## 💰 Support & API Monetization
 
-- **Android**: 5.1 (Lollipop) or newer  
-- **iOS**: 13.0 or newer
+Help us keep Horizon independent. You can purchase API access or send a direct donation.
 
----
-
-## 🛠️ Development
-
-### Prerequisites
-
-- Node.js 16+
-- For Android: [Android Studio](https://developer.android.com/studio) (2022.2.1+), Android SDK  
-- For iOS: macOS (Monterey 12.5+), Xcode 14.1+
-
-### Getting Started
-
-```bash
-# Clone the repository
-git clone https://github.com/gobitfly/eth2-beaconchain-explorer-app.git
-cd eth2-beaconchain-explorer-app
-
-# Install global dependencies
-npm install -g @ionic/cli native-run cordova-res
-
-# Install project dependencies
-npm i
+### 📡 Wallet (ETH / USDC / BNB)
