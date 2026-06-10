@@ -9,27 +9,30 @@
   <a href="https://github.com/gobitfly/eth2-beaconchain-explorer-app/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/gobitfly/eth2-beaconchain-explorer-app" alt="License: GPLv3">
   </a>
-  <a href="https://play.google.com/store/apps/details?id=in.beaconcha.mobile">
-    <img src="https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white" alt="Android">
-  </a>
-  <a href="https://apps.apple.com/at/app/beaconchain-dashboard/id1541822121">
-    <img src="https://img.shields.io/badge/iOS-000000?logo=apple&logoColor=white" alt="iOS">
+  <a href="https://beaconchain.us">
+    <img src="https://img.shields.io/badge/Web%20App-Horizon-4f9eff" alt="Web App">
   </a>
 </p>
 
 # Beaconchain Dashboard
 
-**Open‑source validator performance tracker for Ethereum and Gnosis** – available on Android & iOS.
+**Open‑source validator performance tracker for Ethereum and Gnosis** – available as a **Progressive Web App (PWA)** and direct APK download.  
+No app stores required.
 
 Built with Angular, Ionic, and Capacitor. Uses the [beaconcha.in API](https://beaconcha.in).
 
 <p align="center">
-  <a href="https://play.google.com/store/apps/details?id=in.beaconcha.mobile">
-    <img src="https://beaconcha.in/img/android.png" alt="Get it on Google Play" height="60">
+  <a href="https://beaconchain.us">
+    <img src="https://beaconcha.in/img/android.png" alt="Install PWA on Android" height="60">
   </a>
-  <a href="https://apps.apple.com/at/app/beaconchain-dashboard/id1541822121">
-    <img src="https://beaconcha.in/img/ios.png" alt="Download on App Store" height="60">
+  <a href="https://beaconchain.us">
+    <img src="https://beaconcha.in/img/ios.png" alt="Install PWA on iOS" height="60">
   </a>
+</p>
+
+<p align="center">
+  <strong>📱 Install as PWA:</strong> open <a href="https://beaconchain.us">beaconchain.us</a> in Chrome/Safari → tap "Add to Home Screen".<br>
+  <strong>⬇️ Direct APK:</strong> <a href="https://beaconchain.us/download/app-release.apk">Download latest Android APK</a> (enable "unknown sources")
 </p>
 
 ---
