@@ -17,9 +17,10 @@
 # Beaconchain Dashboard
 
 **Open‑source validator performance tracker for Ethereum and Gnosis** – available as a **Progressive Web App (PWA)** and direct APK download.  
-No app stores required.
+No app stores required.  
+Uses our own **Horizon API** – independent, offline‑first, and formally verified.
 
-Built with Angular, Ionic, and Capacitor. Uses the [beaconcha.in API](https://beaconcha.in).
+Built with Angular, Ionic, and Capacitor.
 
 <p align="center">
   <a href="https://beaconchain.us">
@@ -40,7 +41,8 @@ Built with Angular, Ionic, and Capacitor. Uses the [beaconcha.in API](https://be
 ## 📖 About
 
 Beaconchain Dashboard is an **Angular** application written in TypeScript, HTML & CSS.  
-It leverages the **Ionic framework** for mobile UI components and **Ionic Capacitor** as a bridge to native device features.
+It leverages the **Ionic framework** for mobile UI components and **Ionic Capacitor** as a bridge to native device features.  
+All data is served by the **Horizon API**, a fully independent backend built on Go, PostgreSQL, and Redis.
 
 ---
 
