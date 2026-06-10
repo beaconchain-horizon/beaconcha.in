@@ -1,113 +1,88 @@
+<p align="center">
+  <img src=".github/banner.png" alt="Beaconchain Dashboard Banner" width="100%">
+</p>
 
-![[Beaconchain Dashboard](https://beaconcha.in/mobile)](.github/banner.png)  
-[![Build](https://github.com/gobitfly/eth2-beaconchain-explorer-app/actions/workflows/build.yaml/badge.svg)](https://github.com/gobitfly/eth2-beaconchain-explorer-app/actions/workflows/build.yaml)  
+<p align="center">
+  <a href="https://github.com/gobitfly/eth2-beaconchain-explorer-app/actions/workflows/build.yaml">
+    <img src="https://github.com/gobitfly/eth2-beaconchain-explorer-app/actions/workflows/build.yaml/badge.svg" alt="Build Status">
+  </a>
+  <a href="https://github.com/gobitfly/eth2-beaconchain-explorer-app/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/gobitfly/eth2-beaconchain-explorer-app" alt="License: GPLv3">
+  </a>
+  <a href="https://play.google.com/store/apps/details?id=in.beaconcha.mobile">
+    <img src="https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white" alt="Android">
+  </a>
+  <a href="https://apps.apple.com/at/app/beaconchain-dashboard/id1541822121">
+    <img src="https://img.shields.io/badge/iOS-000000?logo=apple&logoColor=white" alt="iOS">
+  </a>
+</p>
 
 # Beaconchain Dashboard
 
-Beaconchain Dashboard is an open source ethereum 2.0 validator performance tracker app for Android and iOS. It utilizes the beaconcha.in API. 
+**Open‑source validator performance tracker for Ethereum and Gnosis** – available on Android & iOS.
 
+Built with Angular, Ionic, and Capacitor. Uses the [beaconcha.in API](https://beaconcha.in).
 
-[![Get it on Google Play](https://beaconcha.in/img/android.png)](https://play.google.com/store/apps/details?id=in.beaconcha.mobile)
-[![Get it App Store](https://beaconcha.in/img/ios.png)](https://apps.apple.com/at/app/beaconchain-dashboard/id1541822121)
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=in.beaconcha.mobile">
+    <img src="https://beaconcha.in/img/android.png" alt="Get it on Google Play" height="60">
+  </a>
+  <a href="https://apps.apple.com/at/app/beaconchain-dashboard/id1541822121">
+    <img src="https://beaconcha.in/img/ios.png" alt="Download on App Store" height="60">
+  </a>
+</p>
 
-## About
+---
 
-Beaconchain Dashboard is an Angular app written in Typescript, HTML & CSS. It utilizes the Ionic framework for mobile components and Ionic Capacitor as bridge for native code.
+## 📖 About
 
-## Features
+Beaconchain Dashboard is an **Angular** application written in TypeScript, HTML & CSS.  
+It leverages the **Ionic framework** for mobile UI components and **Ionic Capacitor** as a bridge to native device features.
 
-- Keep track on your validators online status, balances, returns and more  
-- Various notification alerts for your validators  
-- Combined dashboard view  
-- Support for up to 100 validators  
-- Ethereum client update notifications  
-- Network warnings  
-- Support for multiple currencies  
-- Mainnet & Testnet support  
-- Add validators with public key, index or eth 1.0 deposit addresses  
-- Light Theme & Dark Theme  
+---
 
-## Device support
+## ✨ Features
 
-- Android 5.0 or newer
-- iOS 11 or newer
+| Category | Description |
+|----------|-------------|
+| 📊 **Validator Monitor** | Online status, balances, returns, and performance |
+| 🔔 **Alerts** | Push notifications for missed blocks, proposals, and validator status changes |
+| ⛓️ **Networks** | Ethereum Mainnet, Gnosis Chain (also testnets) |
+| 📈 **Block Rewards** | Execution + consensus rewards overview |
+| 🖥️ **Machine Monitoring** | CPU usage, network usage, and more |
+| 🚀 **Rocketpool** | Minipool tracking and RPL rewards |
+| 🧩 **Custom Stake Share** | Support for partially owned validators |
+| 📱 **Dashboard** | Combined view for up to **280 validators** |
+| ⚠️ **Network Warnings** | Client update notifications and network health alerts |
+| 💱 **Multi‑currency** | Support for various fiat currencies |
+| 🌓 **Themes** | Light and dark themes |
 
-## Development
-### Getting started
+---
 
-1. Clone repo
-2. Install dependencies
-```
+## 📱 Device Support
+
+- **Android**: 5.1 (Lollipop) or newer  
+- **iOS**: 13.0 or newer
+
+---
+
+## 🛠️ Development
+
+### Prerequisites
+
+- Node.js 16+
+- For Android: [Android Studio](https://developer.android.com/studio) (2022.2.1+), Android SDK  
+- For iOS: macOS (Monterey 12.5+), Xcode 14.1+
+
+### Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/gobitfly/eth2-beaconchain-explorer-app.git
+cd eth2-beaconchain-explorer-app
+
+# Install global dependencies
 npm install -g @ionic/cli native-run cordova-res
+
+# Install project dependencies
 npm i
-```
-  
-NOTE: You need to provide your own google-services.json for Android and GoogleService-Info.plist for iOS.  
-
-### Browser
-To run the app in your browser, simply use
-
-`ionic serve`
-
-to start a local webserver with livereload enabled.
-
-### Android
-
-**Prerequisites**
-* Install [Android Studio](https://developer.android.com/studio#downloads]) (recommended 4.1.1 or newer)
-* Use Android Studio to install the Android SDK: https://capacitorjs.com/docs/android
-
-For Linux Users: Open capacitor.config.json (in the root of the project) and adapt the paths for the _linuxAndroidStudioPath_ variable to reflect your local setup.
-
-Build the the app at least once before proceeding:
-
-`ionic build`
-
-#### Livereload
-
-Make sure port 8100 is accessable on your computer and use the following command to run a livereload server
-
-`ionic capacitor run android --livereload --external --host=192.168.0.124 --disableHostCheck`
-
-Adapt the --host param to match your computers IP. 
-
-#### Build for production
-
-`ionic capacitor run android --prod --release`
-
-#### Install via Android Studio
-To install the app on a real device, follow this guide: https://developer.android.com/studio/run/device
-
-Or to run it in an emulator, follow up here: https://developer.android.com/studio/run/emulator
-
-
-### iOS
-**Prerequisites**
-* macOS with Catalina or newer
-* Xcode 12.2 or newer
-
-Build the the app at least once before proceeding:
-
-`ionic build`
-
-#### Livereload
-
-Make sure port 8100 is accessable on your mac and use the following command to run a livereload server
-
-`ionic capacitor run ios --livereload --external --host=192.168.0.124 --disableHostCheck`
-
-Adapt the --host param to match your macs IP. 
-
-#### Build for production
-
-`ionic capacitor run ios --prod --release`
-
-### Best Practices
-
-* Use components when we need it for multiple pages.
-* Use pipes for currency conversion or interpreting a value
-* Keep in mind that the app can be used in light and dark theme, use css vars when styling. Global theme attributes can be found in src/app/theme/variables.scss and src/app/global.scss.
-
-## License
-
-This project is licensed under GPLv3. [LICENSE]
