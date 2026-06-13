@@ -1,0 +1,57 @@
+name: Build ads.json from approved issues
+
+on:
+  issues:
+    types: [labeled, unlabeled, opened, edited]
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch approved issues using GitHub CLI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue list --label "ad-approved" --state all --json title,body,createdAt,labels,url > raw_issues.json
+      - name: Parse issues and generate ads.json
+        run: |
+          python3 <<EOF
+          import json, re
+          with open('raw_issues.json') as f:
+              issues = json.load(f)
+          ads = []
+          for issue in issues:
+              body = issue['body']
+              title = issue['title'].replace('[Ad] ', '').strip()
+              category = re.search(r'### Category\s+(.+)', body)
+              category = category.group(1).strip() if category else 'Other'
+              price = re.search(r'### Price.*\s+(.+)', body)
+              price = price.group(1).strip() if price else 'Negotiable'
+              seller_wallet = re.search(r'### Payment Wallet Address.*\s+(.+)', body)
+              seller_wallet = seller_wallet.group(1).strip() if seller_wallet else ''
+              description = re.search(r'### Full Description\s+(.+?)(?=\n###|\n*$)', body, re.DOTALL)
+              description = description.group(1).strip() if description else ''
+              contact = re.search(r'### Contact.*\s+(.+)', body)
+              contact = contact.group(1).strip() if contact else ''
+              ads.append({
+                  'title': title,
+                  'category': category,
+                  'price': price,
+                  'seller_wallet': seller_wallet,
+                  'description': description,
+                  'contact': contact,
+                  'created_at': issue['createdAt'],
+                  'url': issue['url']
+              })
+          with open('ads.json', 'w', encoding='utf-8') as f:
+              json.dump(ads, f, indent=2, ensure_ascii=False)
+          EOF
+      - name: Commit and push ads.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ads.json
+          git commit -m "update ads.json" || echo "No changes"
+          git push
