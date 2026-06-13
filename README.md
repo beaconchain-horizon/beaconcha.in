@@ -33,3 +33,4 @@ Add this to your main HTML file (before `</body>`):
       .catch(err => console.error('❌ SW failed:', err));
   }
 </script>
+
