@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pickup Truck Simulator – Horizon Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            background: linear-gradient(145deg, #1a472a 0%, #0e2a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', system-ui, monospace;
+        }
+        .game-container {
+            background: #2c2e2e;
+            border-radius: 32px;
+            padding: 20px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.4);
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 16px;
+            box-shadow: 0 0 0 4px #f39c12, 0 0 0 8px #2c3e50;
+            cursor: none;
+            background-color: #3a5e3a;
+        }
+        .info {
+            margin-top: 20px;
+            color: #ecf0f1;
+            text-align: center;
+            background: #1e272e;
+            padding: 12px;
+            border-radius: 60px;
+            font-weight: bold;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        button {
+            background: #f39c12;
+            border: none;
+            color: #2c3e50;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.1s linear;
+            font-family: monospace;
+        }
+        button:active {
+            transform: scale(0.95);
+            background: #e67e22;
+        }
+        .speed {
+            background: #00000088;
+            backdrop-filter: blur(4px);
+            border-radius: 40px;
+            padding: 6px 14px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="game-container">
+        <canvas id="truckCanvas" width="800" height="400"></canvas>
+        <div class="info">
+            🚛 <strong>HORIZON PICKUP TRUCK</strong> 🚛<br>
+            <span>← →  arrows to move | ⬆️ to honk (sort of)</span>
+            <div class="controls">
+                <button id="leftBtn">◀ LEFT</button>
+                <button id="rightBtn">RIGHT ▶</button>
+            </div>
+            <div style="margin-top: 12px;">
+                <span class="speed">⚡ X position: <span id="xPos">400</span> px</span>
+            </div>
+        </div>
+    </div>
+    <p style="text-align: center; margin-top: 12px; color: #ffe6cc;">🎁 Here's your real pickup truck — drive it anywhere, no fuel needed! 🎁</p>
+</div>
+
+<script>
+    (function() {
+        const canvas = document.getElementById('truckCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Truck position (center X of truck body)
+        let truckX = canvas.width / 2;
+        const TRUCK_WIDTH = 100;
+        const TRUCK_HEIGHT = 55;
+        const MIN_X = TRUCK_WIDTH / 2 + 10;
+        const MAX_X = canvas.width - TRUCK_WIDTH / 2 - 10;
+        
+        // Draw road stripes (simple)
+        let roadOffset = 0;
+        
+        function drawPickupTruck(x, y) {
+            // y is bottom of wheels ~ 330px, truck body sits higher
+            const bodyY = y - 40;
+            
+            // --- CABIN (dark blue) ---
+            ctx.fillStyle = "#2c3e50";
+            ctx.fillRect(x - 35, bodyY - 25, 45, 45);
+            // windshield
+            ctx.fillStyle = "#85c1e9";
+            ctx.fillRect(x - 30, bodyY - 20, 25, 20);
+            // window frame
+            ctx.strokeStyle = "#1a252f";
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(x - 30, bodyY - 20, 25, 20);
+            
+            // --- CARGO BED (pickup part) ---
+            ctx.fillStyle = "#bdc3c7";
+            ctx.fillRect(x - 10, bodyY - 22, 55, 42);
+            // wood rails?
+            ctx.fillStyle = "#a0522d";
+            ctx.fillRect(x - 5, bodyY - 28, 45, 8);
+            // cargo (random items)
+            ctx.fillStyle = "#f1c40f";
+            ctx.fillRect(x, bodyY - 15, 15, 12);
+            ctx.fillStyle = "#e67e22";
+            ctx.fillRect(x + 18, bodyY - 18, 12, 15);
+            
+            // --- TRUCK BODY lower part ---
+            ctx.fillStyle = "#e67e22"; // orange accent
+            ctx.fillRect(x - 38, bodyY - 5, 85, 20);
+            
+            // --- WHEELS (2 visible, plus one hidden) ---
+            ctx.fillStyle = "#2d2d2d";
+            ctx.shadowBlur = 0;
+            // front wheel
+            ctx.beginPath();
+            ctx.arc(x - 20, y - 10, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#7f8c8d";
+            ctx.beginPath();
+            ctx.arc(x - 20, y - 10, 6, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // rear wheel
+            ctx.fillStyle = "#2d2d2d";
+            ctx.beginPath();
+            ctx.arc(x + 28, y - 10, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#7f8c8d";
+            ctx.beginPath();
+            ctx.arc(x + 28, y - 10, 6, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // headlight
+            ctx.fillStyle = "#f4d03f";
+            ctx.beginPath();
+            ctx.arc(x - 45, bodyY - 8, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(x - 46, bodyY - 10, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // taillight
+            ctx.fillStyle = "#e74c3c";
+            ctx.fillRect(x + 42, bodyY - 12, 6, 10);
+            
+            // grill
+            ctx.fillStyle = "#95a5a6";
+            ctx.fillRect(x - 48, bodyY - 20, 8, 25);
+        }
+        
+        function drawRoad() {
+            // asphalt
+            ctx.fillStyle = "#2c3e2f";
+            ctx.fillRect(0, canvas.height - 70, canvas.width, 70);
+            // road lines (dashed)
+            ctx.beginPath();
+            ctx.strokeStyle = "#f7dc6f";
+            ctx.lineWidth = 5;
+            ctx.setLineDash([25, 30]);
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height - 38);
+            ctx.lineTo(canvas.width, canvas.height - 38);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            // side lines
+            ctx.strokeStyle = "#e67e22";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height - 55);
+            ctx.lineTo(canvas.width, canvas.height - 55);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height - 20);
+            ctx.lineTo(canvas.width, canvas.height - 20);
+            ctx.stroke();
+        }
+        
+        function drawBackground() {
+            // sky gradient
+            const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            grad.addColorStop(0, "#87CEEB");
+            grad.addColorStop(0.7, "#b0e0ff");
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height - 70);
+            // sun
+            ctx.fillStyle = "#f39c12";
+            ctx.beginPath();
+            ctx.arc(70, 60, 35, 0, Math.PI * 2);
+            ctx.fill();
+            // clouds
+            ctx.fillStyle = "#ecf0f1cc";
+            ctx.beginPath();
+            ctx.ellipse(600, 50, 45, 35, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(650, 40, 35, 30, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        let animationId;
+        let leftPressed = false;
+        let rightPressed = false;
+        
+        function updatePosition() {
+            let step = 6;
+            if (leftPressed) truckX -= step;
+            if (rightPressed) truckX += step;
+            // clamp
+            if (truckX < MIN_X) truckX = MIN_X;
+            if (truckX > MAX_X) truckX = MAX_X;
+            document.getElementById('xPos').innerText = Math.floor(truckX);
+        }
+        
+        function drawScene() {
+            updatePosition();
+            drawBackground();
+            drawRoad();
+            // draw the pickup truck at (truckX, canvas.height - 45)
+            drawPickupTruck(truckX, canvas.height - 45);
+            // draw speed / steering hint
+            ctx.font = "bold 14px monospace";
+            ctx.fillStyle = "#fff8e7";
+            ctx.shadowBlur = 0;
+            ctx.fillText("🚚 DRIVE YOUR PICKUP", 20, 40);
+        }
+        
+        function animate() {
+            drawScene();
+            animationId = requestAnimationFrame(animate);
+        }
+        
+        // Keyboard controls
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                leftPressed = true;
+                e.preventDefault();
+            } else if (e.key === 'ArrowRight') {
+                rightPressed = true;
+                e.preventDefault();
+            } else if (e.key === 'ArrowUp') {
+                // horn effect (visual)
+                const hornMsg = document.createElement('div');
+                hornMsg.innerText = '📢 HONK HONK! 📢';
+                hornMsg.style.position = 'fixed';
+                hornMsg.style.bottom = '20px';
+                hornMsg.style.left = '50%';
+                hornMsg.style.transform = 'translateX(-50%)';
+                hornMsg.style.backgroundColor = '#f39c12';
+                hornMsg.style.color = '#1e2a2e';
+                hornMsg.style.padding = '5px 15px';
+                hornMsg.style.borderRadius = '30px';
+                hornMsg.style.fontWeight = 'bold';
+                hornMsg.style.zIndex = '999';
+                hornMsg.style.fontFamily = 'monospace';
+                document.body.appendChild(hornMsg);
+                setTimeout(() => hornMsg.remove(), 500);
+                e.preventDefault();
+            }
+        });
+        
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft') leftPressed = false;
+            if (e.key === 'ArrowRight') rightPressed = false;
+        });
+        
+        // Button controls for touch/mouse
+        document.getElementById('leftBtn').addEventListener('mousedown', () => leftPressed = true);
+        document.getElementById('leftBtn').addEventListener('mouseup', () => leftPressed = false);
+        document.getElementById('leftBtn').addEventListener('mouseleave', () => leftPressed = false);
+        
+        document.getElementById('rightBtn').addEventListener('mousedown', () => rightPressed = true);
+        document.getElementById('rightBtn').addEventListener('mouseup', () => rightPressed = false);
+        document.getElementById('rightBtn').addEventListener('mouseleave', () => rightPressed = false);
+        
+        // prevent context menu on canvas
+        canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+        
+        // start
+        animate();
+    })();
+</script>
+</body>
+</html>
