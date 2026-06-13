@@ -1,0 +1,45 @@
+const CACHE_NAME = 'horizon-hub-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/ads.json',
+  '/offline.html'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+  );
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // اگر در کش موجود بود، همان را برگردان
+        if (response) {
+          return response;
+        }
+        // اگر درخواست مربوط به ads.json بود و در کش نبود، خطای آفلاین ندهیم
+        if (event.request.url.includes('/ads.json')) {
+          return fetch(event.request).catch(() => {
+            return new Response(JSON.stringify([]), {
+              headers: { 'Content-Type': 'application/json' }
+            });
+          });
+        }
+        // برای بقیه درخواست‌ها، از شبکه دریافت کن
+        return fetch(event.request).catch(() => {
+          // اگر درخواست مربوط به صفحه (navigation) بود و شبکه در دسترس نبود، صفحه آفلاین را نشان بده
+          if (event.request.mode === 'navigate') {
+            return caches.match('/offline.html');
+          }
+          return new Response('Offline content not available', {
+            status: 503,
+            statusText: 'Service Unavailable'
+          });
+        });
+      })
+  );
+});
