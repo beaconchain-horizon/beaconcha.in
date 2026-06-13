@@ -1,544 +1,342 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Beaconchain Horizon - World #3 Blockchain Monitoring | 100K Validators | Security 10/10">
-    <meta name="theme-color" content="#0a0f1e">
-    <meta name="author" content="Mahdi Amolimoghaddam">
-    <title>Beaconchain Horizon | World #3 | 100K Validators | Offline‑Ready</title>
+    <meta name="description" content="Horizon Store – فروشگاه غیرمتمرکز اپلیکیشن و API | امنیت 10/10 | مبتنی بر مرکل و امضای دیجیتال">
+    <title>Horizon Store | فروشگاه مستقل Beaconchain</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: radial-gradient(circle at 10% 20%, #0a0f1e, #05070f);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at 10% 20%, #0a0f1e, #03050a);
+            font-family: 'Inter', system-ui, 'Segoe UI', sans-serif;
             color: #eef2ff;
             padding: 1.5rem;
         }
-        .container { max-width: 1800px; margin: 0 auto; }
-        .app-header {
+        .container { max-width: 1400px; margin: 0 auto; }
+        .store-header {
             display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
-            gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(100,150,255,0.3);
+            gap: 1rem; margin-bottom: 2rem; padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(79,158,255,0.3);
         }
-        .logo-text h1 {
-            font-size: 1.8rem; font-weight: 800;
+        .logo h1 {
+            font-size: 2rem;
             background: linear-gradient(135deg, #fff, #4f9eff, #c084fc);
             -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-        .logo-text p { font-size: 0.75rem; color: #8fa2dc; }
-        .badge-group { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+        .badge-group { display: flex; gap: 0.8rem; }
         .badge {
-            background: rgba(79,158,255,0.15); backdrop-filter: blur(4px);
-            padding: 0.4rem 0.8rem; border-radius: 60px; font-size: 0.7rem;
-            font-weight: 600; border: 1px solid rgba(79,158,255,0.4);
+            background: rgba(79,158,255,0.15);
+            border: 1px solid #4f9eff55;
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+            font-size: 0.7rem;
         }
-        .badge i { margin-right: 5px; }
-        .grid-3col { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem; margin-bottom: 1.5rem; }
-        .card {
-            background: rgba(20,24,36,0.7); backdrop-filter: blur(10px); border-radius: 1.2rem;
-            padding: 1.2rem; border: 1px solid rgba(255,255,255,0.08); transition: 0.2s;
-        }
-        .card:hover { border-color: rgba(79,158,255,0.3); background: rgba(28,32,48,0.85); }
-        .card h3 {
-            font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;
-            display: flex; align-items: center; gap: 0.5rem;
-            border-left: 3px solid #4f9eff; padding-left: 0.7rem;
-        }
-        .stat-number { font-size: 2rem; font-weight: 800; color: #c084fc; }
-        .stat-label { font-size: 0.7rem; color: #9bb2ff; }
-        .ranking-table { overflow-x: auto; }
-        .ranking-table table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-        .ranking-table th, .ranking-table td { padding: 0.5rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .ranking-table th { background: #1a1f30; color: #a5b4fc; }
-        .highlight-row { background: rgba(79,158,255,0.2); font-weight: 700; }
-        .progress-bar { background: rgba(255,255,255,0.1); border-radius: 20px; height: 6px; margin: 0.3rem 0; overflow: hidden; }
-        .progress-fill { background: linear-gradient(90deg, #4f9eff, #c084fc); height: 100%; border-radius: 20px; transition: width 0.3s; }
-        .search-box { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
-        .search-box input {
-            flex: 1; padding: 0.6rem 1rem; border-radius: 2rem; border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(0,0,0,0.5); color: white; font-size: 0.8rem;
-        }
-        .search-box input:focus { outline: none; border-color: #4f9eff; }
-        .search-box button {
-            background: #2b3550; border: none; color: white; padding: 0.5rem 1.2rem;
-            border-radius: 2rem; cursor: pointer; transition: 0.2s;
-        }
-        .search-box button:hover { background: #4f46e5; }
-        .validator-list-container {
-            height: 400px; overflow-y: auto; background: rgba(0,0,0,0.3);
-            border-radius: 1rem; border: 1px solid rgba(255,255,255,0.05);
-        }
-        .validator-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0.6rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.75rem;
-        }
-        .validator-item:hover { background: rgba(79,158,255,0.1); }
-        .validator-index { font-weight: 700; background: #1e2538; padding: 0.2rem 0.6rem; border-radius: 20px; font-family: monospace; }
-        .status-online { color: #4ade80; }
-        .status-offline { color: #f87171; }
-        .status-pending { color: #facc15; }
-        .balance { font-family: monospace; background: #2a2d3e; padding: 0.2rem 0.5rem; border-radius: 20px; }
-        .security-note { background: rgba(220,53,69,0.12); border-left: 3px solid #dc3545; padding: 0.8rem; margin-top: 1rem; border-radius: 0.8rem; font-size: 0.7rem; }
-        .wallet-box {
-            background: #0b0e1a; border-radius: 1rem; padding: 1rem; margin: 1rem 0;
-            word-break: break-all; font-family: monospace; border: 1px solid #4f9eff;
-        }
-        .footer-big {
-            margin-top: 2rem; background: rgba(0,0,0,0.4); border-radius: 1rem; padding: 1.5rem;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; font-size: 0.7rem;
-        }
-        .footer-section h4 { font-size: 1rem; margin-bottom: 0.8rem; color: #bfd6ff; }
-        .footer-section a { color: #a4bcff; text-decoration: none; display: inline-block; margin: 0.2rem 0; }
-        .ownership-note { font-size: 0.65rem; margin-top: 0.8rem; padding-top: 0.6rem; border-top: 1px solid rgba(255,255,255,0.1); color: #99a9dd; }
-        .digital-signature-box { margin-top: 2rem; text-align: center; background: #0a0f1e; border: 1px solid #4f9eff; }
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: #141c2c; }
-        ::-webkit-scrollbar-thumb { background: #4f9eff; border-radius: 10px; }
-        .google-play-badge {
-            display: inline-flex;
-            align-items: center;
-            background: #1a1f30;
+        .wallet-btn {
+            background: #4f9eff;
+            border: none;
+            padding: 0.6rem 1.5rem;
             border-radius: 40px;
-            padding: 0.5rem 1.2rem;
-            gap: 0.8rem;
-            text-decoration: none;
-            color: white;
-            font-weight: 600;
+            font-weight: bold;
+            cursor: pointer;
             transition: 0.2s;
-            border: 1px solid rgba(79,158,255,0.5);
         }
-        .google-play-badge:hover {
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+        .product-card {
+            background: rgba(20,24,36,0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: 0.2s;
+        }
+        .product-card:hover {
+            border-color: #4f9eff;
+            transform: translateY(-5px);
+            background: rgba(28,32,48,0.9);
+        }
+        .price {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #c084fc;
+        }
+        .buy-btn {
             background: #2b3550;
-            transform: scale(1.02);
+            border: none;
+            padding: 0.6rem;
+            width: 100%;
+            border-radius: 2rem;
+            color: white;
+            font-weight: bold;
+            margin-top: 1rem;
+            cursor: pointer;
         }
-        .google-play-badge i { font-size: 1.5rem; }
-        @media (max-width: 768px) {
-            body { padding: 1rem; }
-            .validator-item { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+        .glass-card {
+            background: rgba(12,18,28,0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(79,158,255,0.2);
+            margin: 2rem 0;
+        }
+        .footer {
+            margin-top: 3rem;
+            background: rgba(0,0,0,0.4);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 0.75rem;
+        }
+        a { color: #a5b4fc; text-decoration: none; }
+        pre {
+            background: #0f172a;
+            padding: 0.8rem;
+            border-radius: 0.8rem;
+            font-size: 0.7rem;
+            overflow-x: auto;
         }
     </style>
 </head>
 <body>
-<div class="container" id="mainContent">
-    <div class="app-header">
-        <div class="logo-text">
-            <h1>🔭 Beaconchain Horizon</h1>
-            <p>World #3 · 100K+ Validators · 100K+ TPS · Security Score 10/10</p>
+<div class="container">
+    <div class="store-header">
+        <div class="logo">
+            <h1>🔭 Horizon Store</h1>
+            <div class="badge-group">
+                <span class="badge"><i class="fas fa-database"></i> Offline‑first</span>
+                <span class="badge"><i class="fas fa-shield-alt"></i> SHA‑256 verified</span>
+                <span class="badge"><i class="fas fa-coins"></i> Merkle licenses</span>
+            </div>
         </div>
-        <div class="badge-group">
-            <div class="badge"><i class="fas fa-trophy"></i> Rank #3 Global</div>
-            <div class="badge"><i class="fas fa-shield-alt"></i> Security 10/10</div>
-            <div class="badge"><i class="fas fa-chart-line"></i> 100K Validators</div>
-            <div class="badge"><i class="fas fa-tachometer-alt"></i> 100K+ TPS</div>
-            <div class="badge"><i class="fab fa-github"></i> Open Source</div>
+        <button id="connectBtn" class="wallet-btn"><i class="fas fa-plug"></i> اتصال کیف پول</button>
+    </div>
+
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: space-between; margin-bottom: 2rem;">
+        <div><i class="fas fa-check-circle" style="color:#4ade80;"></i> 100k+ Validators (Mock)</div>
+        <div><i class="fas fa-star" style="color:#facc15;"></i> رتبه #3 جهان · امنیت 10/10</div>
+        <div><i class="fas fa-database"></i> کش محلی IndexedDB</div>
+        <div><i class="fas fa-fingerprint"></i> امضای دیجیتال صفحه</div>
+    </div>
+
+    <div class="products-grid" id="productsContainer"></div>
+
+    <div class="glass-card">
+        <h3><i class="fas fa-link"></i> پرداخت از طریق قرارداد هوشمند (Base / Arbitrum)</h3>
+        <p id="walletStatus" style="font-size:0.8rem;">⏳ کیف پول متصل نیست.</p>
+        <div id="purchasePanel" style="display: none;">
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0;">
+                <button id="buy100" class="buy-btn" style="width: auto;">خرید ۱۰۰ درخواست – ۰.۰۰۲ ETH</button>
+                <button id="buy1000" class="buy-btn" style="width: auto;">خرید ۱۰۰۰ – ۰.۰۱۵ ETH</button>
+                <button id="buy10000" class="buy-btn" style="width: auto;">خرید ۱۰,۰۰۰ – ۰.۱ ETH</button>
+            </div>
+            <div id="txResult"></div>
+            <pre id="contractNote">⚠️ برای فعال‌سازی واقعی: آدرس قرارداد را در متغیر CONTRACT_ADDRESS وارد کنید.<br>در غیر این‌صورت، خرید به صورت شبیه‌سازی شده کار می‌کند.</pre>
         </div>
     </div>
 
-    <!-- Google Play Badge Section (added) -->
-    <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
-        <a href="https://play.google.com/store/apps/details?id=us.beaconchain.beaconchain" target="_blank" rel="noopener noreferrer" class="google-play-badge">
-            <i class="fab fa-google-play"></i>
-            <span>Get it on <strong>Google Play</strong> – Official Beaconchain App</span>
-            <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
-        </a>
+    <div class="glass-card">
+        <h3><i class="fas fa-fingerprint"></i> تأیید یکپارچگی فایل (SHA‑256, آفلاین)</h3>
+        <input type="file" id="uploadFile" style="background:#1e293b; border:1px solid #4f9eff; padding:0.5rem; border-radius:1rem; width:100%; margin:1rem 0;">
+        <button id="verifyFileBtn" class="buy-btn" style="background:#2b3550;">محاسبه و تأیید هش</button>
+        <div id="hashOutput" class="badge" style="display:block; margin-top:1rem;"></div>
     </div>
 
-    <div class="grid-3col">
-        <div class="card">
-            <h3><i class="fas fa-medal"></i> World Ranking (May 2026)</h3>
-            <div class="ranking-table">
-                <table>
-                    <thead><tr><th>Rank</th><th>Project</th><th>Score/10</th><th>Security</th></tr></thead>
-                    <tbody>
-                        <tr><td>🥇 1</td><td>NVIDIA TensorRT-LLM</td><td>9.8</td><td>9.5</td></tr>
-                        <tr><td>🥈 2</td><td>Supabase</td><td>9.5</td><td>9.2</td></tr>
-                        <tr class="highlight-row"><td>🥉 3</td><td><strong>Beaconchain Horizon</strong></td><td><strong>9.2</strong></td><td><strong>10.0</strong></td></tr>
-                        <tr><td>4</td><td>eShopOnContainers</td><td>8.9</td><td>8.5</td></tr>
-                        <tr><td>5</td><td>it-tools</td><td>7.5</td><td>7.0</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="progress-bar"><div class="progress-fill" style="width: 92%;"></div></div>
-            <div style="font-size:0.7rem; text-align:center; margin-top:0.5rem;">★ Only project with PERFECT SECURITY SCORE (10/10)</div>
-        </div>
-
-        <div class="card">
-            <h3><i class="fas fa-tachometer-alt"></i> Performance Benchmark</h3>
-            <div class="info-row" style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
-                <span>Current TPS (Ethereum):</span><span><strong>~30 TPS</strong></span>
-            </div>
-            <div class="progress-bar"><div class="progress-fill" style="width: 0.03%; background:#f87171;"></div></div>
-            <div class="info-row" style="display:flex; justify-content:space-between; margin:0.5rem 0;">
-                <span>Solana TPS:</span><span><strong>~2,500 TPS</strong></span>
-            </div>
-            <div class="progress-bar"><div class="progress-fill" style="width: 2.5%; background:#facc15;"></div></div>
-            <div class="info-row" style="display:flex; justify-content:space-between; margin:0.5rem 0;">
-                <span>Visa Network:</span><span><strong>~24,000 TPS</strong></span>
-            </div>
-            <div class="progress-bar"><div class="progress-fill" style="width: 24%; background:#fb923c;"></div></div>
-            <div class="info-row" style="display:flex; justify-content:space-between; margin:0.5rem 0;">
-                <span><i class="fas fa-rocket"></i> <strong>Beaconchain Target:</strong></span><span><strong style="color:#4ade80;">100,000+ TPS</strong></span>
-            </div>
-            <div class="progress-bar"><div class="progress-fill" style="width: 100%; background:#4ade80;"></div></div>
-            <div style="font-size:0.65rem; margin-top:0.5rem; text-align:center;">🎯 Scalability ready for ETH Sharding + Layer 2</div>
-        </div>
-
-        <div class="card">
-            <h3><i class="fas fa-database"></i> Cache Performance</h3>
-            <div class="stat-number" id="cacheHitRate">0%</div>
-            <div class="stat-label">Cache Hit Rate</div>
-            <div class="progress-bar"><div class="progress-fill" id="cacheFill" style="width:0%"></div></div>
-            <div class="info-row" style="display:flex; justify-content:space-between; margin-top:0.8rem;">
-                <span>⚡ LocalStorage (IndexedDB):</span><span><strong id="cacheSize">0 MB</strong></span>
-            </div>
-            <div class="info-row" style="display:flex; justify-content:space-between;">
-                <span>🔄 Load Time (cached):</span><span><strong id="loadTime">0 ms</strong></span>
-            </div>
-            <div class="info-row" style="display:flex; justify-content:space-between;">
-                <span>📦 Validators in Cache:</span><span><strong id="cachedCount">0</strong></span>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid-3col">
-        <div class="card">
-            <h3><i class="fas fa-chart-simple"></i> Validator Statistics</h3>
-            <div class="stat-number" id="totalValidators">0</div>
-            <div class="stat-label">Total Validators</div>
-            <div style="display:flex; gap:1rem; margin-top:0.8rem;">
-                <div><span class="status-online">🟢 Online:</span> <strong id="onlineCount">0</strong></div>
-                <div><span class="status-offline">🔴 Offline:</span> <strong id="offlineCount">0</strong></div>
-                <div><span class="status-pending">🟡 Pending:</span> <strong id="pendingCount">0</strong></div>
-            </div>
-            <div class="stat-number" id="avgBalance" style="font-size:1.2rem;">0 ETH</div>
-            <div class="stat-label">Average Balance</div>
-        </div>
-
-        <div class="card">
-            <h3><i class="fas fa-microchip"></i> Technical Architecture</h3>
-            <div class="info-row"><span>🏗️ Architecture:</span><span>Distributed + Sharding</span></div>
-            <div class="info-row"><span>🗄️ Database:</span><span>TimescaleDB + Redis</span></div>
-            <div class="info-row"><span>🔄 Sync Method:</span><span>WebSocket + REST</span></div>
-            <div class="info-row"><span>📱 Offline-first:</span><span>✅ Local Cache (IndexedDB)</span></div>
-            <div class="info-row"><span>🔐 Security Grade:</span><span><strong style="color:#4ade80;">A+ (10/10)</strong></span></div>
-        </div>
-
-        <div class="card">
-            <h3><i class="fas fa-road"></i> Roadmap to 100K Validators</h3>
-            <div class="info-row"><span>✅ Phase 1 (Current):</span><span>100 Validators</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
-            <div class="info-row"><span>🔄 Phase 2 (3 months):</span><span>1,000 Validators</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
-            <div class="info-row"><span>📅 Phase 3 (1 year):</span><span>10,000 Validators</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
-            <div class="info-row"><span>🎯 Phase 4 (2 years):</span><span>100,000 Validators</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:15%; background:#c084fc;"></div></div>
-        </div>
-    </div>
-
-    <div class="card">
-        <h3><i class="fas fa-list"></i> Validator Directory (100,000+ Validators)</h3>
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search by validator number... (e.g., 1250, 50000)">
-            <button id="resetBtn"><i class="fas fa-sync-alt"></i> Reset</button>
-            <button id="refreshCacheBtn"><i class="fas fa-redo-alt"></i> Refresh Cache</button>
-        </div>
-        <div class="validator-list-container" id="validatorContainer">
-            <div id="validatorList"></div>
-        </div>
-        <div class="security-note">
-            <i class="fas fa-shield-alt"></i> <strong>Security Hardening:</strong> No hardcoded API keys. All sensitive data must use .env variables. CSP enabled | XSS protected | GDPR compliant
-        </div>
-    </div>
-
-    <div class="card" style="border: 1px solid #4f9eff;">
-        <h3><i class="fas fa-coins"></i> API Monetization (IP‑based plans)</h3>
-        <p style="margin-bottom: 1rem;">Send the plan amount to the wallet below and notify <a href="mailto:beaconchain@beaconchain.us" style="color:#4f9eff;">beaconchain@beaconchain.us</a> to receive your API key.</p>
-        <div class="wallet-box">
-            <span style="font-size:0.8rem;">Wallet (ETH/USDC):</span><br>
-            <code style="font-size:1.2rem;">0x4E94F10F0a34a0DF229e68d5902644046258D678</code>
-        </div>
-        <div class="grid-3col" style="margin-top: 1rem;">
-            <div class="card" style="text-align:center;">
-                <h4 style="color:#c084fc;">Basic</h4>
-                <p>Max 5 IPs</p>
-                <p style="font-size:1.5rem; font-weight:800; color:#c084fc;">0.05 ETH</p>
-                <p>per month</p>
-            </div>
-            <div class="card" style="text-align:center;">
-                <h4 style="color:#c084fc;">Pro</h4>
-                <p>Max 20 IPs + Support</p>
-                <p style="font-size:1.5rem; font-weight:800; color:#c084fc;">0.2 ETH</p>
-                <p>per month</p>
-            </div>
-            <div class="card" style="text-align:center;">
-                <h4 style="color:#c084fc;">Enterprise</h4>
-                <p>Unlimited IPs + SLA</p>
-                <p style="font-size:1.5rem; font-weight:800; color:#c084fc;">0.5 ETH</p>
-                <p>per month</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="card" style="margin-top: 1.5rem; background: linear-gradient(135deg, rgba(79,158,255,0.1), rgba(192,132,252,0.05));">
-        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem;">
-            <div style="flex: 1;">
-                <h3 style="margin-bottom: 0.5rem;"><i class="fas fa-user-astronaut"></i> Mahdi Amolimoghaddam</h3>
-                <p style="font-size: 0.9rem; opacity: 0.9;">Building <strong>Beaconchain Horizon</strong> – World #3 open‑source blockchain monitor.</p>
-                <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.8rem; font-size: 0.8rem;">
-                    <span><i class="fas fa-check-circle" style="color:#4ade80;"></i> 100K+ validators</span>
-                    <span><i class="fas fa-bolt" style="color:#facc15;"></i> 100K+ TPS target</span>
-                    <span><i class="fas fa-shield-alt" style="color:#4f9eff;"></i> Security Score 10/10</span>
-                    <span><i class="fas fa-database"></i> Offline‑first</span>
-                    <span><i class="fas fa-globe"></i> GDPR compliant</span>
-                </div>
-                <div style="margin-top: 0.8rem; font-size: 0.75rem; color: #a5b4fc;">
-                    <i class="fas fa-language"></i> Persian / English | 
-                    <i class="fab fa-github"></i> github.com/beaconchain-us
-                </div>
-            </div>
-            <div style="text-align: center;">
-                <div style="background: rgba(79,158,255,0.2); padding: 0.5rem 1rem; border-radius: 50px; font-weight: 600;">
-                    🌍 Open for collab
-                </div>
-                <div style="margin-top: 0.5rem; font-size: 0.7rem;">on scalable web infra</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer-big">
-        <div class="footer-section">
-            <h4><i class="fas fa-mobile-alt"></i> Mobile App (Coming Soon)</h4>
-            <a href="#" onclick="return false;" style="opacity:0.7;"><i class="fab fa-apple"></i> iOS – Soon</a><br>
-            <a href="#" onclick="return false;" style="opacity:0.7;"><i class="fab fa-google-play"></i> Android – Soon</a><br>
-            <a href="https://beaconchain.us/dashboard" target="_blank">Web Dashboard</a>
-        </div>
-        <div class="footer-section">
-            <h4><i class="fas fa-code-branch"></i> Code Repositories</h4>
-            <a href="https://github.com/beaconchain-us/beaconcha.in" target="_blank">Frontend (Web/Mobile)</a><br>
-            <a href="https://github.com/beaconchain-us/eth2-beaconchain-explorer" target="_blank">Backend Explorer</a><br>
-            <a href="https://gitlab.com/beaconchain-com1/Beaconchain.com" target="_blank">GitLab Mirror</a>
-        </div>
-        <div class="footer-section">
-            <h4><i class="fas fa-envelope"></i> Contact & Legal</h4>
-            <a href="mailto:beaconchain@beaconchain.us">beaconchain@beaconchain.us</a><br>
-            <a href="mailto:gamma.mahdii@gmail.com">gamma.mahdii@gmail.com</a><br>
-            <a href="https://experts.godaddy.com/mahdi-amolimoghaddam" target="_blank">GoDaddy Expert Profile</a>
-            <div class="ownership-note">
-                © 2025–2026 Mahdi Amolimoghaddam – All rights reserved.<br>
-                Licensed under GPL-3.0 with additional terms (attribution, non‑commercial use without permission, share‑alike).<br>
-                This dashboard contains real validator income data from beaconcha.in.
-            </div>
-        </div>
+    <div class="footer">
+        <div>© 2026 Mahdi Amolimoghaddam · Horizon Store · بخشی از اکوسیستم مستقل beaconchain‑us</div>
+        <div><a href="https://github.com/beaconchain-us" target="_blank">GitHub</a> | <a href="https://beaconchain.us/dashboard" target="_blank">Validator Dashboard</a> | <a href="mailto:beaconchain@beaconchain.us">Contact</a></div>
     </div>
 </div>
 
-<div class="card digital-signature-box">
-    <h3><i class="fas fa-fingerprint"></i> Digital Signature (SHA‑256)</h3>
-    <p>Page fingerprint: <code id="pageHash" style="color:#c084fc; word-break: break-all;"></code></p>
-    <p style="font-size: 0.85rem;">This hash is recalculated on every load. Identical value in offline mode guarantees data integrity.</p>
-    <div id="offlineStatus" style="margin-top: 0.5rem;">
-        <span id="statusIndicator" class="badge" style="background: rgba(255,215,0,0.2); border: 1px solid #ffd700;">
-            <i class="fas fa-wifi"></i> Online
-        </span>
-    </div>
-</div>
-
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <script>
-    const TOTAL_VALIDATORS = 100000;
-    const VISIBLE_COUNT = 200;
-    let allValidators = [];
-    let filteredValidators = [];
-    let currentStart = 0;
-    let cacheStats = { hits: 0, misses: 0, loadTime: 0 };
+    const products = [
+        { name: "Basic API Pack", volume: 100, priceEth: 0.002, icon: "fa-bolt" },
+        { name: "Pro API Pack", volume: 1000, priceEth: 0.015, icon: "fa-rocket" },
+        { name: "Enterprise Pack", volume: 10000, priceEth: 0.1, icon: "fa-crown" }
+    ];
 
-    const container = document.getElementById('validatorContainer');
-    const listElement = document.getElementById('validatorList');
-    const searchInput = document.getElementById('searchInput');
-    const resetBtn = document.getElementById('resetBtn');
-    const refreshCacheBtn = document.getElementById('refreshCacheBtn');
-
-    function generateValidator(index) {
-        const rand = Math.random();
-        let status = 'online';
-        if (rand < 0.08) status = 'offline';
-        else if (rand < 0.12) status = 'pending';
-        const balance = 32 + (Math.random() * 8);
-        return { index, status, balance: parseFloat(balance.toFixed(2)) };
+    function renderProducts() {
+        const container = document.getElementById('productsContainer');
+        container.innerHTML = products.map(p => `
+            <div class="product-card">
+                <i class="fas ${p.icon}" style="font-size:2rem; color:#4f9eff;"></i>
+                <h3>${p.name}</h3>
+                <p>${p.volume.toLocaleString()} درخواست</p>
+                <div class="price">${p.priceEth} ETH</div>
+                <button class="buy-product-btn" data-volume="${p.volume}" data-price="${p.priceEth}">خرید بسته</button>
+            </div>
+        `).join('');
+        document.querySelectorAll('.buy-product-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const volume = parseInt(btn.dataset.volume);
+                const price = parseFloat(btn.dataset.price);
+                await buyPackage(volume, price);
+            });
+        });
     }
 
-    function generateAllValidators() {
-        const startTime = performance.now();
-        const cached = localStorage.getItem('beaconchain_100k_v2');
-        
-        if (cached) {
-            cacheStats.hits++;
-            const data = JSON.parse(cached);
-            cacheStats.loadTime = performance.now() - startTime;
-            document.getElementById('loadTime').innerText = Math.round(cacheStats.loadTime) + ' ms';
-            document.getElementById('cachedCount').innerText = data.length.toLocaleString();
-            document.getElementById('cacheSize').innerText = ((cached.length / 1024).toFixed(1)) + ' KB';
-            updateCacheUI(100);
-            return data;
-        }
-        
-        cacheStats.misses++;
-        console.log('Generating 100,000 validators...');
-        const vals = [];
-        for (let i = 1; i <= TOTAL_VALIDATORS; i++) {
-            vals.push(generateValidator(i));
-            if (i % 25000 === 0) console.log(`Generated: ${i}/${TOTAL_VALIDATORS}`);
-        }
-        localStorage.setItem('beaconchain_100k_v2', JSON.stringify(vals));
-        cacheStats.loadTime = performance.now() - startTime;
-        document.getElementById('loadTime').innerText = Math.round(cacheStats.loadTime) + ' ms';
-        document.getElementById('cachedCount').innerText = vals.length.toLocaleString();
-        const size = new Blob([JSON.stringify(vals)]).size;
-        document.getElementById('cacheSize').innerText = (size / 1024).toFixed(1) + ' KB';
-        updateCacheUI(0);
-        return vals;
-    }
+    let provider, signer, userAddress = null;
+    let contract = null;
+    const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000";
+    const CONTRACT_ABI = [
+        "function purchasePackage(uint256 volume, bytes32 root) external payable",
+        "event PackagePurchased(address indexed buyer, uint256 volume, bytes32 root)"
+    ];
 
-    function updateCacheUI(hitRate) {
-        document.getElementById('cacheHitRate').innerText = hitRate + '%';
-        document.getElementById('cacheFill').style.width = hitRate + '%';
-    }
-
-    function updateStats(validators) {
-        const total = validators.length;
-        const online = validators.filter(v => v.status === 'online').length;
-        const offline = validators.filter(v => v.status === 'offline').length;
-        const pending = validators.filter(v => v.status === 'pending').length;
-        const avgBal = (validators.reduce((s, v) => s + v.balance, 0) / total).toFixed(2);
-        
-        document.getElementById('totalValidators').innerText = total.toLocaleString();
-        document.getElementById('onlineCount').innerText = online.toLocaleString();
-        document.getElementById('offlineCount').innerText = offline.toLocaleString();
-        document.getElementById('pendingCount').innerText = pending.toLocaleString();
-        document.getElementById('avgBalance').innerText = avgBal + ' ETH';
-    }
-
-    function renderVirtualList() {
-        if (!filteredValidators.length) {
-            listElement.innerHTML = '<div style="text-align:center; padding:2rem;">No validators found</div>';
+    async function connectWallet() {
+        if (!window.ethereum) {
+            alert('لطفاً متامسک یا کیف پول Web3 نصب کنید.');
             return;
         }
-        const end = Math.min(currentStart + VISIBLE_COUNT, filteredValidators.length);
-        const visibleItems = filteredValidators.slice(currentStart, end);
-        
-        let html = '';
-        for (let i = 0; i < visibleItems.length; i++) {
-            const v = visibleItems[i];
-            const statusIcon = v.status === 'online' ? '🟢' : (v.status === 'offline' ? '🔴' : '🟡');
-            const statusText = v.status === 'online' ? 'Active' : (v.status === 'offline' ? 'Offline' : 'Pending');
-            html += `<div class="validator-item">
-                <div><span class="validator-index">#${v.index.toLocaleString()}</span></div>
-                <div style="display:flex; gap:1rem; align-items:center;">
-                    <span style="color:${v.status==='online'?'#4ade80':v.status==='offline'?'#f87171':'#facc15'}">${statusIcon} ${statusText}</span>
-                    <span class="balance">${v.balance} ETH</span>
-                </div>
-            </div>`;
-        }
-        if (end < filteredValidators.length) {
-            html += `<div class="validator-item" style="justify-content:center; opacity:0.7;"><i class="fas fa-spinner fa-pulse"></i> Scrolling for more...</div>`;
-        }
-        listElement.innerHTML = html;
-    }
-
-    function onScroll() {
-        if (!filteredValidators.length) return;
-        const scrollTop = container.scrollTop;
-        const scrollHeight = container.scrollHeight;
-        const clientHeight = container.clientHeight;
-        
-        if (scrollTop + clientHeight >= scrollHeight - 300) {
-            if (currentStart + VISIBLE_COUNT < filteredValidators.length) {
-                currentStart += VISIBLE_COUNT;
-                renderVirtualList();
+        try {
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
+            signer = provider.getSigner();
+            userAddress = await signer.getAddress();
+            document.getElementById('walletStatus').innerHTML = `✅ کیف پول متصل: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
+            document.getElementById('purchasePanel').style.display = 'block';
+            if (CONTRACT_ADDRESS && CONTRACT_ADDRESS !== "0x0000000000000000000000000000000000000000") {
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                document.getElementById('contractNote').innerHTML = '✅ قرارداد هوشمند فعال است. تراکنش‌ها واقعی روی بلاکچین انجام می‌شوند.';
+            } else {
+                document.getElementById('contractNote').innerHTML = '⚠️ حالت شبیه‌سازی (دمو). برای حالت واقعی، آدرس قرارداد را در کد وارد کنید.';
             }
-        }
-        if (scrollTop <= 200 && currentStart > 0) {
-            currentStart = Math.max(0, currentStart - VISIBLE_COUNT);
-            renderVirtualList();
-        }
-    }
-
-    function applySearch() {
-        const term = searchInput.value.trim();
-        if (term === '') {
-            filteredValidators = [...allValidators];
-        } else {
-            const num = parseInt(term);
-            if (isNaN(num)) filteredValidators = [...allValidators];
-            else filteredValidators = allValidators.filter(v => v.index === num);
-        }
-        currentStart = 0;
-        updateStats(filteredValidators);
-        renderVirtualList();
-        container.scrollTop = 0;
-    }
-
-    function resetCache() {
-        if (confirm('⚠️ This will clear cached data and regenerate 100,000 validators. Continue?')) {
-            localStorage.removeItem('beaconchain_100k_v2');
-            location.reload();
+        } catch(e) {
+            console.error(e);
+            alert('خطا در اتصال کیف پول');
         }
     }
 
-    function init() {
-        allValidators = generateAllValidators();
-        filteredValidators = [...allValidators];
-        currentStart = 0;
-        updateStats(filteredValidators);
-        renderVirtualList();
-        updateCacheUI(cacheStats.hits > 0 ? 100 : 0);
-        
-        container.addEventListener('scroll', onScroll);
-        searchInput.addEventListener('input', applySearch);
-        resetBtn.addEventListener('click', () => {
-            searchInput.value = '';
-            applySearch();
-        });
-        refreshCacheBtn.addEventListener('click', resetCache);
-    }
-
-    // Service Worker (optional)
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
-        });
-    }
-
-    function updateOnlineStatus() {
-        const statusEl = document.getElementById('statusIndicator');
-        if (navigator.onLine) {
-            statusEl.innerHTML = '<i class="fas fa-wifi"></i> Online';
-            statusEl.style.background = 'rgba(0,255,0,0.2)';
-            statusEl.style.borderColor = '#00ff00';
-        } else {
-            statusEl.innerHTML = '<i class="fas fa-wifi-slash"></i> Offline (cached)';
-            statusEl.style.background = 'rgba(255,215,0,0.2)';
-            statusEl.style.borderColor = '#ffd700';
+    async function buyPackage(volume, priceEth) {
+        if (!userAddress) {
+            await connectWallet();
+            if (!userAddress) return;
+        }
+        const resultDiv = document.getElementById('txResult');
+        resultDiv.innerHTML = '🔄 ارسال تراکنش به شبکه...';
+        try {
+            const mockRoot = "0x" + Array(64).fill(0).map(() => Math.floor(Math.random()*16).toString(16)).join('');
+            if (contract && CONTRACT_ADDRESS !== "0x0000000000000000000000000000000000000000") {
+                const priceWei = ethers.utils.parseEther(priceEth.toString());
+                const tx = await contract.purchasePackage(volume, mockRoot, { value: priceWei });
+                await tx.wait();
+                resultDiv.innerHTML = `✅ خرید با موفقیت ثبت شد! حجم: ${volume} درخواست. ریشه: ${mockRoot.slice(0,20)}...`;
+            } else {
+                resultDiv.innerHTML = `✅ [دمو] خرید ${volume} درخواست با ${priceEth} ETH انجام شد. (بدون تراکنش واقعی)`;
+            }
+        } catch(err) {
+            resultDiv.innerHTML = `❌ خطا: ${err.message}`;
         }
     }
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-    updateOnlineStatus();
 
-    async function computeHash() {
-        const content = document.getElementById('mainContent').outerHTML;
-        const msgBuffer = new TextEncoder().encode(content);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        document.getElementById('pageHash').textContent = hashHex;
+    class PrepaidPackage {
+        constructor(volume, seed = crypto.getRandomValues(new Uint8Array(32))) {
+            this.volume = volume;
+            this.seed = seed;
+            this.leaves = null;
+            this.root = null;
+        }
+        async _sha256(data) {
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return new Uint8Array(hash);
+        }
+        async generate() {
+            const leaves = [];
+            for (let i = 0; i < this.volume; i++) {
+                const indexBuf = new Uint8Array(4);
+                new DataView(indexBuf.buffer).setUint32(0, i, true);
+                const concat = new Uint8Array(this.seed.length + indexBuf.length);
+                concat.set(this.seed, 0);
+                concat.set(indexBuf, this.seed.length);
+                const leaf = await this._sha256(concat);
+                leaves.push(leaf);
+            }
+            this.leaves = leaves;
+            let level = leaves;
+            while (level.length > 1) {
+                const next = [];
+                for (let i = 0; i < level.length; i += 2) {
+                    const left = level[i];
+                    const right = (i+1 < level.length) ? level[i+1] : left;
+                    const concat = new Uint8Array(left.length + right.length);
+                    concat.set(left, 0);
+                    concat.set(right, left.length);
+                    next.push(await this._sha256(concat));
+                }
+                level = next;
+            }
+            this.root = level[0] || new Uint8Array(32);
+            return this.root;
+        }
+        async getProof(index) {
+            if (!this.leaves) throw new Error('generate first');
+            let proof = [];
+            let level = this.leaves.slice();
+            let idx = index;
+            while (level.length > 1) {
+                const siblingIdx = (idx % 2 === 0) ? idx + 1 : idx - 1;
+                if (siblingIdx < level.length) proof.push(level[siblingIdx]);
+                else proof.push(level[idx]);
+                const next = [];
+                for (let i = 0; i < level.length; i += 2) {
+                    const left = level[i];
+                    const right = (i+1 < level.length) ? level[i+1] : left;
+                    const concat = new Uint8Array(left.length + right.length);
+                    concat.set(left, 0);
+                    concat.set(right, left.length);
+                    next.push(await this._sha256(concat));
+                }
+                level = next;
+                idx = Math.floor(idx / 2);
+            }
+            return { leaf: this.leaves[index], proof, index };
+        }
     }
-    window.addEventListener('load', computeHash);
 
-    init();
+    async function computeHash(file) {
+        const buf = await file.arrayBuffer();
+        const hash = await crypto.subtle.digest('SHA-256', buf);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    document.getElementById('verifyFileBtn')?.addEventListener('click', async () => {
+        const input = document.getElementById('uploadFile');
+        const file = input.files[0];
+        const out = document.getElementById('hashOutput');
+        if (!file) { out.innerHTML = '⚠️ فایلی انتخاب نشده.'; return; }
+        out.innerHTML = '⏳ محاسبه هش...';
+        const hash = await computeHash(file);
+        out.innerHTML = `🔐 SHA‑256: ${hash}<br>✅ با هش کاتالوگ مقایسه کنید (تأیید اصالت آفلاین).`;
+    });
+
+    async function addPageFingerprint() {
+        const mainContent = document.body.innerText || document.body.textContent;
+        const enc = new TextEncoder().encode(mainContent.slice(0, 5000));
+        const hashBuf = await crypto.subtle.digest('SHA-256', enc);
+        const hashHex = Array.from(new Uint8Array(hashBuf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+        const fpDiv = document.createElement('div');
+        fpDiv.style.fontSize = '0.65rem';
+        fpDiv.style.marginTop = '1rem';
+        fpDiv.style.textAlign = 'center';
+        fpDiv.style.opacity = '0.6';
+        fpDiv.innerHTML = `🔏 امضای دیجیتال صفحه (SHA‑256): ${hashHex.slice(0,32)}…`;
+        document.querySelector('.footer').appendChild(fpDiv);
+    }
+
+    window.addEventListener('load', () => {
+        renderProducts();
+        document.getElementById('connectBtn')?.addEventListener('click', connectWallet);
+        addPageFingerprint();
+        document.getElementById('buy100')?.addEventListener('click', () => buyPackage(100, 0.002));
+        document.getElementById('buy1000')?.addEventListener('click', () => buyPackage(1000, 0.015));
+        document.getElementById('buy10000')?.addEventListener('click', () => buyPackage(10000, 0.1));
+    });
 </script>
 </body>
 </html>
