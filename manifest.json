@@ -1,0 +1,29 @@
+{
+  "name": "Horizon Hub Marketplace",
+  "short_name": "Horizon Hub",
+  "description": "A decentralized marketplace for jobs, digital products, and freelance services.",
+  "start_url": "/index.html?utm_source=homescreen",
+  "display": "standalone",
+  "theme_color": "#2c3e50",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}
