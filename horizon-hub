@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Horizon Hub – Decentralized Marketplace</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="description" content="Peer-to-peer marketplace for jobs, digital products, and freelance services. Pay directly with crypto.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1a1a2e;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 2rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .price-ticker {
+            background: #f0f2f5;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+        }
+
+        /* Section titles */
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 2rem 0 1rem 0;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        /* Grid cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.2);
+        }
+
+        .card .title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .card .meta {
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .card .description {
+            color: #555;
+            line-height: 1.4;
+            margin-bottom: 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .card button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .card button:hover {
+            opacity: 0.9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="logo">
+            <h1>🌐 Horizon Hub</h1>
+            <p>Decentralized P2P Marketplace</p>
+        </div>
+        <div class="price-ticker" id="ticker">
+            <span>ETH: $--.-- | BTC: $--.--</span>
+        </div>
+    </div>
+
+    <div class="section-title">
+        <span>💼</span> Job Offers
+    </div>
+    <div id="jobsList" class="grid">
+        <div class="card">Loading jobs...</div>
+    </div>
+
+    <div class="section-title">
+        <span>🛍️</span> Products & Services
+    </div>
+    <div id="productsList" class="grid">
+        <div class="card">Loading products...</div>
+    </div>
+
+    <footer>
+        <p>🔒 Direct peer-to-peer payments. Buyers send crypto to seller's wallet. Horizon Hub does not hold funds.</p>
+        <p>📢 To advertise, <a href="https://github.com/yourusername/horizon-hub/issues/new/choose" style="color:white;">submit an issue</a> with label "ad-approved".</p>
+    </footer>
+</div>
+
+<script>
+    let allAds = [];
+
+    // Fetch live crypto prices (optional – for ticker)
+    async function fetchPrices() {
+        try {
+            const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin&vs_currencies=usd');
+            const data = await res.json();
+            const eth = data.ethereum?.usd || 0;
+            const btc = data.bitcoin?.usd || 0;
+            document.getElementById('ticker').innerHTML = `ETH: $${eth.toLocaleString()} | BTC: $${btc.toLocaleString()}`;
+        } catch (e) {
+            document.getElementById('ticker').innerHTML = `ETH: -- | BTC: --`;
+        }
+    }
+    fetchPrices();
+    setInterval(fetchPrices, 60000); // every minute
+
+    // Load ads from ads.json (generated by GitHub Actions)
+    function loadAds() {
+        fetch('ads.json')
+            .then(res => {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            })
+            .then(data => {
+                allAds = data;
+                renderJobs();
+                renderProducts();
+            })
+            .catch(err => {
+                console.error('Failed to load ads.json:', err);
+                // Fallback sample data for demo
+                allAds = [
+                    {
+                        title: "Sample Job: Frontend Developer",
+                        category: "Job / Hiring",
+                        price: "Negotiable",
+                        seller_wallet: "0x1234567890abcdef1234567890abcdef12345678",
+                        description: "Looking for a React developer for a 3-month project. Remote, flexible hours.",
+                        contact: "@sample_telegram",
+                        created_at: "2025-01-01T00:00:00Z",
+                        url: "#"
+                    },
+                    {
+                        title: "Premium UI Kit",
+                        category: "Digital Product",
+                        price: "0.05 ETH",
+                        seller_wallet: "0xabcdef1234567890abcdef1234567890abcdef12",
+                        description: "300+ components, fully responsive, Figma + React code included.",
+                        contact: "seller@example.com",
+                        created_at: "2025-01-01T00:00:00Z",
+                        url: "#"
+                    }
+                ];
+                renderJobs();
+                renderProducts();
+            });
+    }
+
+    function renderJobs() {
+        const jobs = allAds.filter(ad => ad.category === 'Job / Hiring');
+        const container = document.getElementById('jobsList');
+        if (!container) return;
+        if (jobs.length === 0) {
+            container.innerHTML = '<div class="card">✨ No job ads yet. Be the first to post!</div>';
+            return;
+        }
+        container.innerHTML = jobs.map(job => `
+            <div class="card">
+                <div class="title">📌 ${escapeHtml(job.title)}</div>
+                <div class="meta">💰 ${escapeHtml(job.price)}</div>
+                <div class="description">${escapeHtml(job.description.substring(0, 150))}${job.description.length > 150 ? '…' : ''}</div>
+                <button class="contactBtn" data-contact="${escapeHtml(job.contact)}" data-wallet="${escapeHtml(job.seller_wallet)}">
+                    📩 Contact / Apply
+                </button>
+            </div>
+        `).join('');
+        attachContactButtons();
+    }
+
+    function renderProducts() {
+        const products = allAds.filter(ad => ad.category !== 'Job / Hiring');
+        const container = document.getElementById('productsList');
+        if (!container) return;
+        if (products.length === 0) {
+            container.innerHTML = '<div class="card">📦 No products yet. Be the first to list!</div>';
+            return;
+        }
+        container.innerHTML = products.map(prod => `
+            <div class="card">
+                <div class="title">📦 ${escapeHtml(prod.title)}</div>
+                <div class="meta">💰 ${escapeHtml(prod.price)}</div>
+                <div class="description">${escapeHtml(prod.description.substring(0, 150))}${prod.description.length > 150 ? '…' : ''}</div>
+                <button class="buyBtn" data-wallet="${escapeHtml(prod.seller_wallet)}" data-title="${escapeHtml(prod.title)}" data-price="${escapeHtml(prod.price)}">
+                    🛒 Buy / Details
+                </button>
+            </div>
+        `).join('');
+        attachBuyButtons();
+    }
+
+    function attachBuyButtons() {
+        document.querySelectorAll('.buyBtn').forEach(btn => {
+            btn.onclick = () => {
+                const wallet = btn.dataset.wallet;
+                const title = btn.dataset.title;
+                const price = btn.dataset.price;
+                alert(`🔐 Purchase: ${title}\n💰 Price: ${price}\n\n📤 Send exact amount to this wallet:\n${wallet}\n\n📧 After payment, contact seller with proof (see ad for contact).`);
+            };
+        });
+    }
+
+    function attachContactButtons() {
+        document.querySelectorAll('.contactBtn').forEach(btn => {
+            btn.onclick = () => {
+                const contact = btn.dataset.contact;
+                const wallet = btn.dataset.wallet;
+                alert(`📞 Contact: ${contact || 'Not provided'}\n\n💳 Seller wallet (for payments): ${wallet}`);
+            };
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Start
+    loadAds();
+</script>
+
+<!-- Register Service Worker for PWA offline support -->
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').then(reg => {
+                console.log('Service Worker registered', reg);
+            }).catch(err => {
+                console.log('SW registration failed', err);
+            });
+        });
+    }
+</script>
+</body>
+</html>
