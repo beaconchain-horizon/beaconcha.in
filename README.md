@@ -1,71 +1,35 @@
 <p align="center">
-  <img src=".github/banner.png" alt="Beaconchain Dashboard Banner" width="100%">
+  <img src=".github/banner.png" alt="Horizon Hub Marketplace Banner" width="100%">
 </p>
 
-<p align="center">
-  <a href="https://github.com/gobitfly/eth2-beaconchain-explorer-app/actions/workflows/build.yaml">
-    <img src="https://github.com/gobitfly/eth2-beaconchain-explorer-app/actions/workflows/build.yaml/badge.svg" alt="Build Status">
-  </a>
-  <a href="https://github.com/gobitfly/eth2-beaconchain-explorer-app/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/gobitfly/eth2-beaconchain-explorer-app" alt="License: GPLv3">
-  </a>
-  <a href="https://beaconchain.us">
-    <img src="https://img.shields.io/badge/Web%20App-Horizon-4f9eff" alt="Web App">
-  </a>
-</p>
+# Horizon Hub Marketplace – PWA with Pickup Truck 🚛
 
-# Beaconchain Dashboard
-
-**Open‑source validator performance tracker for Ethereum and Gnosis** – available as a **Progressive Web App (PWA)** and direct APK download.  
-No app stores required.  
-Uses our own **Horizon API** – independent, offline‑first, and formally verified.
-
-Built with Angular, Ionic, and Capacitor.
-
-<p align="center">
-  <a href="https://beaconchain.us">
-    <img src="https://beaconcha.in/img/android.png" alt="Install PWA on Android" height="60">
-  </a>
-  <a href="https://beaconchain.us">
-    <img src="https://beaconcha.in/img/ios.png" alt="Install PWA on iOS" height="60">
-  </a>
-</p>
-
-<p align="center">
-  <strong>📱 Install as PWA:</strong> open <a href="https://beaconchain.us">beaconchain.us</a> in Chrome/Safari → tap "Add to Home Screen".<br>
-  <strong>⬇️ Direct APK:</strong> <a href="https://beaconchain.us/download/app-release.apk">Download latest Android APK</a> (enable "Install from unknown sources")
-</p>
+**A decentralized marketplace for jobs, digital products, and freelance services – now with a pickup truck.**
 
 ---
 
-## 📖 About
+## 🚨 PWA not working? Common fixes
 
-Beaconchain Dashboard is an **Angular** application written in TypeScript, HTML & CSS.  
-It leverages the **Ionic framework** for mobile UI components and **Ionic Capacitor** as a bridge to native device features.  
-All data is served by the **Horizon API**, a fully independent backend built on Go, PostgreSQL, and Redis.
+If your PWA (Progressive Web App) won't install or shows offline errors, check these:
 
----
+| Issue | Solution |
+|-------|----------|
+| ❌ Not served over HTTPS | PWAs require **HTTPS** or **localhost**. Use GitHub Pages, Netlify, or a valid SSL certificate. |
+| ❌ Manifest not linked | Add `<link rel="manifest" href="/manifest.json">` in your HTML `<head>`. |
+| ❌ Wrong manifest path | Ensure `manifest.json` is in the **root** folder and paths to icons are correct. |
+| ❌ Service worker not registered | Register `sw.js` in your main JavaScript file. Example below. |
+| ❌ Icons missing or wrong size | Provide at least `192x192` and `512x512` PNG icons. Check `manifest.json`. |
+| ❌ Start URL not cached | The service worker must cache `start_url` (e.g., `/index.html`). |
 
-## ✨ Features
+### ✅ Quick fix – register service worker
 
-| Category | Description |
-|----------|-------------|
-| 📊 **Validator Monitor** | Online status, balances, returns, and performance |
-| 🔔 **Alerts** | Push notifications for missed blocks, proposals, and validator status changes |
-| ⛓️ **Networks** | Ethereum Mainnet, Gnosis Chain (also testnets) |
-| 📈 **Block Rewards** | Execution + consensus rewards overview |
-| 🖥️ **Machine Monitoring** | CPU usage, network usage, and more |
-| 🚀 **Rocketpool** | Minipool tracking and RPL rewards |
-| 🧩 **Custom Stake Share** | Support for partially owned validators |
-| 📱 **Dashboard** | Combined view for up to **280 validators** |
-| ⚠️ **Network Warnings** | Client update notifications and network health alerts |
-| 💱 **Multi‑currency** | Support for various fiat currencies |
-| 🌓 **Themes** | Light and dark themes |
+Add this to your main HTML file (before `</body>`):
 
----
-
-## 💰 Support & API Monetization
-
-Help us keep Horizon independent. You can purchase API access or send a direct donation.
-
-### 📡 Wallet (ETH / USDC / BNB)
+```html
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log('✅ PWA service worker ready'))
+      .catch(err => console.error('❌ SW failed:', err));
+  }
+</script>
