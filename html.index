@@ -1,342 +1,99 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Horizon Store – فروشگاه غیرمتمرکز اپلیکیشن و API | امنیت 10/10 | مبتنی بر مرکل و امضای دیجیتال">
-    <title>Horizon Store | فروشگاه مستقل Beaconchain</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: radial-gradient(circle at 10% 20%, #0a0f1e, #03050a);
-            font-family: 'Inter', system-ui, 'Segoe UI', sans-serif;
-            color: #eef2ff;
-            padding: 1.5rem;
-        }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .store-header {
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
-            gap: 1rem; margin-bottom: 2rem; padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(79,158,255,0.3);
-        }
-        .logo h1 {
-            font-size: 2rem;
-            background: linear-gradient(135deg, #fff, #4f9eff, #c084fc);
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-        }
-        .badge-group { display: flex; gap: 0.8rem; }
-        .badge {
-            background: rgba(79,158,255,0.15);
-            border: 1px solid #4f9eff55;
-            padding: 0.3rem 1rem;
-            border-radius: 60px;
-            font-size: 0.7rem;
-        }
-        .wallet-btn {
-            background: #4f9eff;
-            border: none;
-            padding: 0.6rem 1.5rem;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.8rem;
-            margin: 2rem 0;
-        }
-        .product-card {
-            background: rgba(20,24,36,0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: 0.2s;
-        }
-        .product-card:hover {
-            border-color: #4f9eff;
-            transform: translateY(-5px);
-            background: rgba(28,32,48,0.9);
-        }
-        .price {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #c084fc;
-        }
-        .buy-btn {
-            background: #2b3550;
-            border: none;
-            padding: 0.6rem;
-            width: 100%;
-            border-radius: 2rem;
-            color: white;
-            font-weight: bold;
-            margin-top: 1rem;
-            cursor: pointer;
-        }
-        .glass-card {
-            background: rgba(12,18,28,0.7);
-            backdrop-filter: blur(12px);
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            border: 1px solid rgba(79,158,255,0.2);
-            margin: 2rem 0;
-        }
-        .footer {
-            margin-top: 3rem;
-            background: rgba(0,0,0,0.4);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            text-align: center;
-            font-size: 0.75rem;
-        }
-        a { color: #a5b4fc; text-decoration: none; }
-        pre {
-            background: #0f172a;
-            padding: 0.8rem;
-            border-radius: 0.8rem;
-            font-size: 0.7rem;
-            overflow-x: auto;
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <div class="store-header">
-        <div class="logo">
-            <h1>🔭 Horizon Store</h1>
-            <div class="badge-group">
-                <span class="badge"><i class="fas fa-database"></i> Offline‑first</span>
-                <span class="badge"><i class="fas fa-shield-alt"></i> SHA‑256 verified</span>
-                <span class="badge"><i class="fas fa-coins"></i> Merkle licenses</span>
-            </div>
-        </div>
-        <button id="connectBtn" class="wallet-btn"><i class="fas fa-plug"></i> اتصال کیف پول</button>
-    </div>
+// ============================================================
+// Horizon Hub – Service Worker
+// ============================================================
+// Version: 1.0.0
+// Author: Mahdi Amolimoghaddam
+// Description: Enables offline support, caching, and PWA functionality
+// ============================================================
 
-    <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: space-between; margin-bottom: 2rem;">
-        <div><i class="fas fa-check-circle" style="color:#4ade80;"></i> 100k+ Validators (Mock)</div>
-        <div><i class="fas fa-star" style="color:#facc15;"></i> رتبه #3 جهان · امنیت 10/10</div>
-        <div><i class="fas fa-database"></i> کش محلی IndexedDB</div>
-        <div><i class="fas fa-fingerprint"></i> امضای دیجیتال صفحه</div>
-    </div>
+const CACHE_NAME = 'horizon-hub-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/favicon.ico',
+  '/logo-192.png',
+  '/logo-512.png'
+  // Add more files as needed (CSS, JS, images, etc.)
+];
 
-    <div class="products-grid" id="productsContainer"></div>
+// ============================================================
+// Install Event – Cache core files
+// ============================================================
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        console.log('✅ Service Worker: Caching files...');
+        return cache.addAll(urlsToCache);
+      })
+      .catch(err => {
+        console.warn('⚠️ Service Worker: Failed to cache files:', err);
+      })
+  );
+  // Force the waiting service worker to become the active service worker
+  self.skipWaiting();
+});
 
-    <div class="glass-card">
-        <h3><i class="fas fa-link"></i> پرداخت از طریق قرارداد هوشمند (Base / Arbitrum)</h3>
-        <p id="walletStatus" style="font-size:0.8rem;">⏳ کیف پول متصل نیست.</p>
-        <div id="purchasePanel" style="display: none;">
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0;">
-                <button id="buy100" class="buy-btn" style="width: auto;">خرید ۱۰۰ درخواست – ۰.۰۰۲ ETH</button>
-                <button id="buy1000" class="buy-btn" style="width: auto;">خرید ۱۰۰۰ – ۰.۰۱۵ ETH</button>
-                <button id="buy10000" class="buy-btn" style="width: auto;">خرید ۱۰,۰۰۰ – ۰.۱ ETH</button>
-            </div>
-            <div id="txResult"></div>
-            <pre id="contractNote">⚠️ برای فعال‌سازی واقعی: آدرس قرارداد را در متغیر CONTRACT_ADDRESS وارد کنید.<br>در غیر این‌صورت، خرید به صورت شبیه‌سازی شده کار می‌کند.</pre>
-        </div>
-    </div>
+// ============================================================
+// Activate Event – Clean up old caches
+// ============================================================
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('🗑️ Service Worker: Removing old cache:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  // Claim all clients immediately
+  self.clients.claim();
+});
 
-    <div class="glass-card">
-        <h3><i class="fas fa-fingerprint"></i> تأیید یکپارچگی فایل (SHA‑256, آفلاین)</h3>
-        <input type="file" id="uploadFile" style="background:#1e293b; border:1px solid #4f9eff; padding:0.5rem; border-radius:1rem; width:100%; margin:1rem 0;">
-        <button id="verifyFileBtn" class="buy-btn" style="background:#2b3550;">محاسبه و تأیید هش</button>
-        <div id="hashOutput" class="badge" style="display:block; margin-top:1rem;"></div>
-    </div>
-
-    <div class="footer">
-        <div>© 2026 Mahdi Amolimoghaddam · Horizon Store · بخشی از اکوسیستم مستقل beaconchain‑us</div>
-        <div><a href="https://github.com/beaconchain-us" target="_blank">GitHub</a> | <a href="https://beaconchain.us/dashboard" target="_blank">Validator Dashboard</a> | <a href="mailto:beaconchain@beaconchain.us">Contact</a></div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-<script>
-    const products = [
-        { name: "Basic API Pack", volume: 100, priceEth: 0.002, icon: "fa-bolt" },
-        { name: "Pro API Pack", volume: 1000, priceEth: 0.015, icon: "fa-rocket" },
-        { name: "Enterprise Pack", volume: 10000, priceEth: 0.1, icon: "fa-crown" }
-    ];
-
-    function renderProducts() {
-        const container = document.getElementById('productsContainer');
-        container.innerHTML = products.map(p => `
-            <div class="product-card">
-                <i class="fas ${p.icon}" style="font-size:2rem; color:#4f9eff;"></i>
-                <h3>${p.name}</h3>
-                <p>${p.volume.toLocaleString()} درخواست</p>
-                <div class="price">${p.priceEth} ETH</div>
-                <button class="buy-product-btn" data-volume="${p.volume}" data-price="${p.priceEth}">خرید بسته</button>
-            </div>
-        `).join('');
-        document.querySelectorAll('.buy-product-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const volume = parseInt(btn.dataset.volume);
-                const price = parseFloat(btn.dataset.price);
-                await buyPackage(volume, price);
-            });
-        });
-    }
-
-    let provider, signer, userAddress = null;
-    let contract = null;
-    const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000";
-    const CONTRACT_ABI = [
-        "function purchasePackage(uint256 volume, bytes32 root) external payable",
-        "event PackagePurchased(address indexed buyer, uint256 volume, bytes32 root)"
-    ];
-
-    async function connectWallet() {
-        if (!window.ethereum) {
-            alert('لطفاً متامسک یا کیف پول Web3 نصب کنید.');
-            return;
+// ============================================================
+// Fetch Event – Serve from cache, fallback to network
+// ============================================================
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // Return cached response if found
+        if (response) {
+          return response;
         }
-        try {
-            provider = new ethers.providers.Web3Provider(window.ethereum);
-            await provider.send("eth_requestAccounts", []);
-            signer = provider.getSigner();
-            userAddress = await signer.getAddress();
-            document.getElementById('walletStatus').innerHTML = `✅ کیف پول متصل: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
-            document.getElementById('purchasePanel').style.display = 'block';
-            if (CONTRACT_ADDRESS && CONTRACT_ADDRESS !== "0x0000000000000000000000000000000000000000") {
-                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-                document.getElementById('contractNote').innerHTML = '✅ قرارداد هوشمند فعال است. تراکنش‌ها واقعی روی بلاکچین انجام می‌شوند.';
-            } else {
-                document.getElementById('contractNote').innerHTML = '⚠️ حالت شبیه‌سازی (دمو). برای حالت واقعی، آدرس قرارداد را در کد وارد کنید.';
+        // Otherwise, fetch from network
+        return fetch(event.request)
+          .then(networkResponse => {
+            // Optionally cache new responses dynamically
+            // Only cache successful GET requests
+            if (event.request.method === 'GET' && networkResponse.status === 200) {
+              const responseToCache = networkResponse.clone();
+              caches.open(CACHE_NAME)
+                .then(cache => {
+                  cache.put(event.request, responseToCache);
+                })
+                .catch(err => {
+                  console.warn('⚠️ Service Worker: Failed to cache dynamic request:', err);
+                });
             }
-        } catch(e) {
-            console.error(e);
-            alert('خطا در اتصال کیف پول');
-        }
-    }
+            return networkResponse;
+          })
+          .catch(() => {
+            // Fallback for offline: return a simple offline page if available
+            // You can create an offline.html page and cache it
+            // return caches.match('/offline.html');
+            console.warn('⚠️ Service Worker: Network request failed, no offline fallback.');
+          });
+      })
+  );
+});
 
-    async function buyPackage(volume, priceEth) {
-        if (!userAddress) {
-            await connectWallet();
-            if (!userAddress) return;
-        }
-        const resultDiv = document.getElementById('txResult');
-        resultDiv.innerHTML = '🔄 ارسال تراکنش به شبکه...';
-        try {
-            const mockRoot = "0x" + Array(64).fill(0).map(() => Math.floor(Math.random()*16).toString(16)).join('');
-            if (contract && CONTRACT_ADDRESS !== "0x0000000000000000000000000000000000000000") {
-                const priceWei = ethers.utils.parseEther(priceEth.toString());
-                const tx = await contract.purchasePackage(volume, mockRoot, { value: priceWei });
-                await tx.wait();
-                resultDiv.innerHTML = `✅ خرید با موفقیت ثبت شد! حجم: ${volume} درخواست. ریشه: ${mockRoot.slice(0,20)}...`;
-            } else {
-                resultDiv.innerHTML = `✅ [دمو] خرید ${volume} درخواست با ${priceEth} ETH انجام شد. (بدون تراکنش واقعی)`;
-            }
-        } catch(err) {
-            resultDiv.innerHTML = `❌ خطا: ${err.message}`;
-        }
-    }
-
-    class PrepaidPackage {
-        constructor(volume, seed = crypto.getRandomValues(new Uint8Array(32))) {
-            this.volume = volume;
-            this.seed = seed;
-            this.leaves = null;
-            this.root = null;
-        }
-        async _sha256(data) {
-            const hash = await crypto.subtle.digest('SHA-256', data);
-            return new Uint8Array(hash);
-        }
-        async generate() {
-            const leaves = [];
-            for (let i = 0; i < this.volume; i++) {
-                const indexBuf = new Uint8Array(4);
-                new DataView(indexBuf.buffer).setUint32(0, i, true);
-                const concat = new Uint8Array(this.seed.length + indexBuf.length);
-                concat.set(this.seed, 0);
-                concat.set(indexBuf, this.seed.length);
-                const leaf = await this._sha256(concat);
-                leaves.push(leaf);
-            }
-            this.leaves = leaves;
-            let level = leaves;
-            while (level.length > 1) {
-                const next = [];
-                for (let i = 0; i < level.length; i += 2) {
-                    const left = level[i];
-                    const right = (i+1 < level.length) ? level[i+1] : left;
-                    const concat = new Uint8Array(left.length + right.length);
-                    concat.set(left, 0);
-                    concat.set(right, left.length);
-                    next.push(await this._sha256(concat));
-                }
-                level = next;
-            }
-            this.root = level[0] || new Uint8Array(32);
-            return this.root;
-        }
-        async getProof(index) {
-            if (!this.leaves) throw new Error('generate first');
-            let proof = [];
-            let level = this.leaves.slice();
-            let idx = index;
-            while (level.length > 1) {
-                const siblingIdx = (idx % 2 === 0) ? idx + 1 : idx - 1;
-                if (siblingIdx < level.length) proof.push(level[siblingIdx]);
-                else proof.push(level[idx]);
-                const next = [];
-                for (let i = 0; i < level.length; i += 2) {
-                    const left = level[i];
-                    const right = (i+1 < level.length) ? level[i+1] : left;
-                    const concat = new Uint8Array(left.length + right.length);
-                    concat.set(left, 0);
-                    concat.set(right, left.length);
-                    next.push(await this._sha256(concat));
-                }
-                level = next;
-                idx = Math.floor(idx / 2);
-            }
-            return { leaf: this.leaves[index], proof, index };
-        }
-    }
-
-    async function computeHash(file) {
-        const buf = await file.arrayBuffer();
-        const hash = await crypto.subtle.digest('SHA-256', buf);
-        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
-    }
-
-    document.getElementById('verifyFileBtn')?.addEventListener('click', async () => {
-        const input = document.getElementById('uploadFile');
-        const file = input.files[0];
-        const out = document.getElementById('hashOutput');
-        if (!file) { out.innerHTML = '⚠️ فایلی انتخاب نشده.'; return; }
-        out.innerHTML = '⏳ محاسبه هش...';
-        const hash = await computeHash(file);
-        out.innerHTML = `🔐 SHA‑256: ${hash}<br>✅ با هش کاتالوگ مقایسه کنید (تأیید اصالت آفلاین).`;
-    });
-
-    async function addPageFingerprint() {
-        const mainContent = document.body.innerText || document.body.textContent;
-        const enc = new TextEncoder().encode(mainContent.slice(0, 5000));
-        const hashBuf = await crypto.subtle.digest('SHA-256', enc);
-        const hashHex = Array.from(new Uint8Array(hashBuf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-        const fpDiv = document.createElement('div');
-        fpDiv.style.fontSize = '0.65rem';
-        fpDiv.style.marginTop = '1rem';
-        fpDiv.style.textAlign = 'center';
-        fpDiv.style.opacity = '0.6';
-        fpDiv.innerHTML = `🔏 امضای دیجیتال صفحه (SHA‑256): ${hashHex.slice(0,32)}…`;
-        document.querySelector('.footer').appendChild(fpDiv);
-    }
-
-    window.addEventListener('load', () => {
-        renderProducts();
-        document.getElementById('connectBtn')?.addEventListener('click', connectWallet);
-        addPageFingerprint();
-        document.getElementById('buy100')?.addEventListener('click', () => buyPackage(100, 0.002));
-        document.getElementById('buy1000')?.addEventListener('click', () => buyPackage(1000, 0.015));
-        document.getElementById('buy10000')?.addEventListener('click', () => buyPackage(10000, 0.1));
-    });
-</script>
-</body>
-</html>
+// ============================================================
+// Log Service Worker events for debugging
+// ============================================================
+console.log('✅ Service Worker: Loaded successfully.');
