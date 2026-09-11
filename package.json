@@ -16,7 +16,7 @@
   "dependencies": {
     "@angular/animations": "~12.1.0",
     "@angular/common": "~12.1.0",
-    "@angular/core": "~12.1.0",
+    "@angular/core": "~20.3.28",
     "@angular/forms": "~12.1.0",
     "@angular/platform-browser": "~12.1.0",
     "@angular/platform-browser-dynamic": "~12.1.0",
